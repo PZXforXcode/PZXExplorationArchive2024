@@ -61,6 +61,17 @@ class LivePhotoViewController: UIViewController, PHPickerViewControllerDelegate 
         livePhotoView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(livePhotoView)
 
+        // 添加 Live Photo 徽章图像
+        let badgeImage = PHLivePhotoView.livePhotoBadgeImage(options: .overContent)
+        let badgeImageView = UIImageView(image: badgeImage)
+        badgeImageView.translatesAutoresizingMaskIntoConstraints = false
+        livePhotoView.addSubview(badgeImageView)
+
+        NSLayoutConstraint.activate([
+            badgeImageView.trailingAnchor.constraint(equalTo: livePhotoView.trailingAnchor, constant: -10),
+            badgeImageView.bottomAnchor.constraint(equalTo: livePhotoView.bottomAnchor, constant: -10)
+        ])
+
         imageView = UIImageView()
         imageView.backgroundColor = .cyan
         imageView.contentMode = .scaleAspectFit
