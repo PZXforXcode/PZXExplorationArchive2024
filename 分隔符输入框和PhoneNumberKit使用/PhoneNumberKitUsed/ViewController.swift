@@ -26,6 +26,8 @@ class ViewController: UIViewController {
         textField.withDefaultPickerUI = true
         // 最大数字位数限制（当前被注释)
         // textField.maxDigits = 11
+        textField.partialFormatter.defaultRegion = "CN"
+
         // 设置占位符文本
         textField.placeholder = "请输入手机号码"
         // 禁止自动转换约束，以便手动设置约束
