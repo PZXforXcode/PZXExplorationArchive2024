@@ -16,6 +16,7 @@ class MainViewController: SwiftUIViewController<MainView> {
         super.init(rootView: rootView)
         // 初始化完成后设置回调
         setupNavigationCallback()
+         
     }
     
     @MainActor required public init?(coder: NSCoder) {
@@ -59,7 +60,6 @@ class MainViewController: SwiftUIViewController<MainView> {
     
     //MARK: - 操作方法
     @objc private func refreshData() {
-        // 调用ViewModel的刷新方法
-        
+        rootView.reloadData();
     }
 }

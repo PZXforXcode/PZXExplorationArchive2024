@@ -16,10 +16,23 @@ struct MainView: View {
         print("KpengS 初始化了")
     }
     
-    // @StateObject用于在SwiftUI视图中创建和管理ViewModel的生命周期
-    // 当视图重新加载时，ViewModel不会被重新创建
-    @StateObject var viewModel = MainViewModel()
+    /**
+     @ObservedObject：
+     适用于对象由父视图或其他外部来源提供的情况。
+     例如，一个共享的 ViewModel 在多个视图之间传递时，使用 @ObservedObject。
+     典型场景：父视图创建 ViewModel 并将其注入子视图。
+     @StateObject：
+     适用于对象由当前视图拥有并管理的情况。
+     例如，一个视图需要一个专属的 ViewModel 来管理其状态时，使用 @StateObject。
+     典型场景：视图内部需要一个独立的、可持久化的数据模型。
+     */
+//    @StateObject var viewModel = MainViewModel()
+    @ObservedObject var viewModel = MainViewModel()
 
+    func reloadData() {
+        print("调用方法了")
+        viewModel.reloadData()
+    }
     
     var body: some View {
         VStack(spacing: 20) {
