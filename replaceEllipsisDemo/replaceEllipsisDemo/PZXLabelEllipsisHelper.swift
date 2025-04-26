@@ -14,12 +14,9 @@ class PZXLabelEllipsisHelper {
     /// - Parameters:
     ///   - label: 需要处理的标签
     ///   - ellipsis: 省略号字符串，默认为 "......"
-    ///   - charsToReplace: 需要替换的尾部字符数，默认为 3
     /// - Returns: 是否发生了截断并应用了省略号
     
-    static func applyCustomEllipsisIfNeeded(to label: UILabel,
-                                           ellipsis: String = "......",
-                                           charsToReplace: Int = 3) {
+    static func applyCustomEllipsisIfNeeded(to label: UILabel) {
         guard let originalText = label.text,
               let font = label.font,
               label.bounds.width > 0,
@@ -76,19 +73,54 @@ class PZXLabelEllipsisHelper {
         print("是否截断: \(isTruncated)")
         print("可见字符数: \(characterRange.length), 原文字符数: \(originalText.count)")
         
-        // 另一种方法：将临时标签的文本设置为字符索引，看看最后能显示哪个索引
-        let characterIndexString = String(Array(0..<originalText.count).map { String($0 % 10) }.joined())
-        testLabel.text = characterIndexString
-        testLabel.sizeToFit() // 重新计算尺寸
-        
-        // 如果发生截断，应用省略号
-        if isTruncated && visibleString.count >= charsToReplace {
-            // 从可见文本移除最后3个字符，添加省略号
-            let truncatedVisibleText = String(visibleString.dropLast(charsToReplace)) + ellipsis
-            print("truncatedVisibleText = \(truncatedVisibleText)")
+        // 如果发生截断，动态计算需要替换的字符数量
+        if isTruncated && visibleString.count > 0 {
+            // 最少显示的省略号 - 确保至少有3个点
+            let minEllipsis = "..."
             
-            if label.text != truncatedVisibleText {
-                label.text = truncatedVisibleText
+            // 计算最小省略号的宽度
+            let minEllipsisWidth = (minEllipsis as NSString).size(withAttributes: [.font: font]).width
+                        
+            // 从可见字符串的末尾开始，找到合适的截断位置
+            var truncatedText = visibleString
+            var currentWidth: CGFloat = 0
+            var charsRemoved = 0
+            
+            // 首先我们确保至少有空间放最小省略号
+            let maxCharsToRemove = min(visibleString.count - 1, 15) // 最多移除15个字符，并至少保留1个字符
+            
+            // 先移除字符直到有足够空间放置最小省略号
+            while charsRemoved < maxCharsToRemove {
+                // 确保有字符可移除
+                if truncatedText.isEmpty {
+                    break
+                }
+                
+                let lastChar = String(truncatedText.last!)
+                let lastCharWidth = (lastChar as NSString).size(withAttributes: [.font: font]).width
+                
+                // 如果移除的宽度已经足够放置最小省略号，则可以停止移除
+                if currentWidth >= minEllipsisWidth {
+                    break
+                }
+                
+                truncatedText.removeLast()
+                currentWidth += lastCharWidth
+                charsRemoved += 1
+            }
+            
+            // 现在我们有足够空间放最小省略号，看看是否还有更多空间放置完整省略号
+            let actualEllipsis: String
+            actualEllipsis = minEllipsis // 使用最小省略号
+
+            
+            // 添加省略号
+            truncatedText += actualEllipsis
+            
+            print("调整后文本 = \(truncatedText), 移除字符数: \(charsRemoved), 使用省略号: \(actualEllipsis)")
+            
+            if label.text != truncatedText {
+                label.text = truncatedText
             }
         } else if !isTruncated {
             // 没有截断，显示完整文本
@@ -105,11 +137,8 @@ extension UILabel {
     /// 应用自定义省略号（如果文本溢出）
     /// - Parameters:
     ///   - ellipsis: 省略号字符串，默认为 "......"
-    ///   - charsToReplace: 需要替换的尾部字符数，默认为 3
     /// - Returns: 是否应用了省略号
-    func applyCustomEllipsisIfNeeded(ellipsis: String = "......", charsToReplace: Int = 3) {
-        PZXLabelEllipsisHelper.applyCustomEllipsisIfNeeded(to: self,
-                                                              ellipsis: ellipsis,
-                                                              charsToReplace: charsToReplace)
+    func applyCustomEllipsisIfNeeded() {
+        PZXLabelEllipsisHelper.applyCustomEllipsisIfNeeded(to: self)
     }
 }

@@ -17,7 +17,7 @@ class ViewController: UIViewController {
         let label = UILabel()
         label.numberOfLines = 6
         // 将原始文本存储起来
-        self.originalText = "RM 1234567890.1234567890.现在，你可以运行应用程序，并通过点击这两个按钮动态地增加或减少 UILabel 的行数。每次改变行数后，文本都会根据新的行数限制重新应用省略号处理。567890.1234567890.1234567890.1234567890.1234567890.1234567890.1234567890.1234567890.1234567890.12345现在，你可以运行应用程序，并通过点击这两个按钮动态地增加或减少 UILabel 的行数。每次改变行数后，文本都会根据新的行数限制重新应用省略号处理。"
+        self.originalText = "RM 1234567890.1234567890.现在，你可以运行应用程序，并通过点击这两个按钮动态地增加或减少 UILabel 的行数。每次改变行数后，文本都会根据新的行数限制重新应用省略号处理。567890.1234567890.1234567890.1234567890.1234567890.1234567890.1234567890.1234567890.1234567890.12345。jkjhkadsjkhadjhkadsjkanbabnvmnvnmzbnmcvqiooiujkjhkadsjkhadjhkadsjkanbabnvmnvnmzbnmcvqiooiujkjhkadsjkhadjhkadsjkanbabnvmnvnmzbnmcvqiooiujkjhkadsjkhadjhkadsjkanbabnvmnvnmzbnmcvqiooiu"
         label.text = self.originalText // 初始化时设置文本
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 18)
@@ -109,7 +109,7 @@ class ViewController: UIViewController {
     // 增加行数的方法
     @objc private func increaseLines() {
         // 增加行数，最多不超过10行
-        label.numberOfLines = min(label.numberOfLines + 1, 10)
+        label.numberOfLines = min(label.numberOfLines + 1, 20)
 
         // 恢复原始文本，以便重新应用省略号
         if let originalText = self.originalText {
