@@ -60,6 +60,8 @@ class MainViewController: SwiftUIViewController<MainView> {
     
     //MARK: - 操作方法
     @objc private func refreshData() {
-        rootView.reloadData();
+        if (rootView.viewModel.isLoading == false) {
+            rootView.reloadData();
+        }
     }
 }
